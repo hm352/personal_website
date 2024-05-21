@@ -1,12 +1,23 @@
-// App.tsx
-
+// src/MapComponent.tsx
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import MarkerClusterGroup from "react-leaflet-markercluster";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import L from 'leaflet';
-import MapComponent from './MapComponent';
+
+// Set the default icon
+const defaultIcon = L.icon({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowSize: [41, 41]
+});
+
+L.Marker.prototype.options.icon = defaultIcon;
 
 // Dummy data
 const dummyStation: FloodMonitoringStation = {
@@ -70,7 +81,6 @@ const dummyStation: FloodMonitoringStation = {
   readingValue: -0.133
 };
 
-
 interface Measure {
   "@id": string;
   parameter: string;
@@ -87,9 +97,11 @@ interface LatestReading {
   measure: string;
   value: number;
 }
+
 interface APIResponse {
   items: FloodMonitoringStation[]
 }
+
 interface FloodMonitoringStation {
   "@id_x": string;
   RLOIid: string;
@@ -128,11 +140,8 @@ interface FloodMonitoringStation {
   readingValue: number;
 }
 
-
-
-async function fetchData(): Promise<FloodMonitoringStation[]>{
-
-  const apiUrl = 'http://environment.data.gov.uk/flood-monitoring/id/stations'; 
+async function fetchData(): Promise<FloodMonitoringStation[]> {
+  const apiUrl = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
   try {
       const response: Response = await fetch(apiUrl);
       if (!response.ok) {
@@ -146,72 +155,43 @@ async function fetchData(): Promise<FloodMonitoringStation[]>{
   }
 };
 
-const App: React.FC = () => {
+const MapComponent: React.FC = () => {
   const [markers, setMarkers] = useState<FloodMonitoringStation[]>([]);
 
   useEffect(() => {
     // Fetch marker data from API or other source
     const dummyData: FloodMonitoringStation[] = [dummyStation];
     setMarkers(dummyData);
-    fetchData().then( data => {
+    fetchData().then(data => {
       console.log(data);
-      console.log(typeof(data));
-      // this removes empty long and lat values so they do not break map component on render
+      console.log(typeof (data));
+      // This removes empty long and lat values so they do not break the map component on render
       setMarkers(data.filter(
-        (p) =>  typeof p.lat === 'number' && typeof p.long === 'number'
+        (p) => typeof p.lat === 'number' && typeof p.long === 'number'
       ));
-    }
-    );
+    });
   }, []);
 
   return (
-    
-    <div> ``
-    <div>
-      <header style={{
-        backgroundImage: "url('https://tile.loc.gov/storage-services/service/pnp/prokc/21500/21503v.jpg')",
-        backgroundSize: 'contain',
-        fontFamily: 'Georgia, Times New Roman, Times, serif',
-        color: '#ffffff',
-        height: '300px',
-        textAlign: 'center',
-        paddingTop: '50px'
-      }}>
-        <h1>Henry Maher</h1>
-        {/* You can add any additional content for the header here */}
-      </header>
-      <nav style={{
-        backgroundColor: '#ffffff',
-        border: '2px solid #000000',
-        padding: '10px',
-        textAlign: 'center'
-      }}>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
-        {/* Add more navigation links as needed */}
-      </nav>
-      <div className="about-container" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '50px',
-        borderTop: '2px solid #000000',
-        borderBottom: '2px solid #000000'
-      }}>
-        <div className="about-left" style={{ width: '50%', paddingRight: '20px' }}>
-          <h2>About Me</h2>
-          <p>This is the left side of the about me section.</p>
-        </div>
-        <div className="about-right" style={{ width: '50%', paddingLeft: '20px' }}>
-          <img src="about-image.jpg" className="about-image" style={{ float: 'right', width: '200px' }} /> {/* Path to your about me image */}
-        </div>
-      </div>
-    {/* <div style={{ height: '400px', width: '100%' }}> */}
-    <MapComponent/>
-    </div>
-    </div>
+    <MapContainer center={[51.505, -0.09]} maxZoom={18} zoom={7} style={{ height: '400px', width: '100%' }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <MarkerClusterGroup>
+        {markers.map(marker => (
+          <Marker key={marker.label_x} position={[marker.lat, marker.long]}>
+            <Popup>
+              <div>
+                <h3>{marker.catchmentName}</h3>
+                <p>{marker.label_x}</p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+        </MarkerClusterGroup>
+    </MapContainer>
   );
 };
 
-export default App;
+export default MapComponent;
