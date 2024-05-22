@@ -1,11 +1,8 @@
 // App.tsx
 
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import MarkerClusterGroup from "react-leaflet-markercluster";
-import L from 'leaflet';
 import MapComponent from './MapComponent';
 
 // Dummy data
