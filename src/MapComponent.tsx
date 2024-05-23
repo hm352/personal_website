@@ -141,7 +141,7 @@ interface FloodMonitoringStation {
 }
 
 async function fetchData(): Promise<FloodMonitoringStation[]> {
-  const apiUrl = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
+  const apiUrl = 'https://environment.data.gov.uk/flood-monitoring/id/stations';
   try {
       const response: Response = await fetch(apiUrl);
       if (!response.ok) {
