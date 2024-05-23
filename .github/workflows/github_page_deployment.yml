@@ -1,7 +1,8 @@
 name: React Build
 
-on: pull_request
-    # branches: [ "main" ]
+on: 
+  merge:
+    branches: [ "main" ]
     
 env:
   CI: false
@@ -21,7 +22,7 @@ jobs:
       deployments: 'write'
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
     
     steps:
     - uses: actions/checkout@v3
