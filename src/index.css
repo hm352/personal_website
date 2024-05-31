@@ -1,13 +1,148 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+@import "leaflet/dist/leaflet.css";
+@import "leaflet.markercluster/dist/MarkerCluster.css";
+@import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Colors */
+  --forest-green: #228B22;
+  --earth-brown: #8B4513;
+
+  /* Secondary Colors */
+  --sky-blue: #87CEEB;
+  --sunshine-yellow: #FFD700;
+
+  /* Accent Colors */
+  --leaf-green: #32CD32;
+  --clay-orange: #D2691E;
+
+  /* Neutral Colors */
+  --stone-grey: #A9A9A9;
+  --soft-white: #F5F5F5;
+}
+
+/* Example usage */
+body {
+  margin: 0;
+  background-color: var(--soft-white);
+  color: var(--earth-brown);
+  font-family: Arial, sans-serif;
+}
+.container {
+  background-color: white; /* Set a white background for the container */
+  padding: 20px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+  width: 100% ; /* Set the desired width */
+  height: auto; /* Set the desired height */
+  overflow: hidden; /* Hide anything that overflows the container */
+  display: flex; /* Use flexbox to center the image */
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+}
+
+.text-overlay {
+  position: absolute;
+  top: 30%;
+  left: 50%; /* Position in the middle */
+  transform: translate(-50%, -50%); /* Center the text */
+  color: var(--clay-orange);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0; /* Start invisible */
+  animation: fadeIn 2s forwards; /* Animation to fade in */
+}
+
+/* Keyframes for the fade-in animation */
+@keyframes fadeIn {
+  to {
+    opacity: 1; /* Fade in to full visibility */
+  }
+}
+
+/* Optional: Style for hover effect */
+.image-container:hover .text-overlay {
+  animation: fadeInMove 3s forwards; /* Different animation on hover */
+}
+
+/* Keyframes for hover effect */
+@keyframes fadeInMove {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+nav {
+  background-color: var(--soft-white);
+  padding: 10px;
+  border: '2px solid #000000';
+  textAlign: 'center'
+}
+
+nav a {
+  color: var(--forest-green);
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--clay-orange);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--earth-brown);
+}
+
+button.primary {
+  background-color: var(--leaf-green);
+  color: var(--soft-white);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button.secondary {
+  background-color: var(--sunshine-yellow);
+  color: var(--stone-grey);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button.primary:hover, button.secondary:hover {
+  opacity: 0.8;
+}
+
+a {
+  color: var(--sky-blue);
+}
+
+a:hover {
+  color: var(--clay-orange);
+}
+
+footer {
+  background-color: var(--soft-white);
+  color: var(--soft-white);
+  text-align: center;
+  padding: 10px 0;
 }
