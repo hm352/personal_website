@@ -141,7 +141,7 @@ interface FloodMonitoringStation {
 }
 
 async function fetchData(): Promise<FloodMonitoringStation[]> {
-  const apiUrl = 'https://environment.data.gov.uk/flood-monitoring/id/stations';
+  const apiUrl = 'http://environment.data.gov.uk/flood-monitoring/id/stations';
   try {
       const response: Response = await fetch(apiUrl);
       if (!response.ok) {
@@ -180,7 +180,7 @@ const MapComponent: React.FC = () => {
       />
       <MarkerClusterGroup>
         {markers.map(marker => (
-          <Marker key={marker.label_x} position={[marker.lat, marker.long]}>
+          <Marker key={marker.wiskiID} position={[marker.lat, marker.long]}>
             <Popup>
               <div>
                 <h3>{marker.catchmentName}</h3>
